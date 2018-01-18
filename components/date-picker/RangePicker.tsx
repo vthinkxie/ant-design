@@ -116,6 +116,17 @@ export default class RangePicker extends React.Component<any, RangePickerState> 
     ]);
   }
 
+  handleCalendarChange = (value: RangePickerValue) => {
+    const props = this.props;
+    this.setState(({ showDate }) => ({
+      value,
+      showDate: getShowDateFromValue(value) || showDate,
+    }));
+    if (props.onCalendarChange) {
+      props.onCalendarChange(value);
+    }
+  }
+
   handleOpenChange = (open: boolean) => {
     if (!('open' in this.props)) {
       this.setState({ open });
@@ -193,7 +204,7 @@ export default class RangePicker extends React.Component<any, RangePickerState> 
       disabledDate, disabledTime,
       showTime, showToday,
       ranges, onOk, locale, localeCode, format,
-      dateRender, onCalendarChange,
+      dateRender,
     } = props;
     if (value && localeCode) {
       if (value[0]) {
@@ -235,7 +246,7 @@ export default class RangePicker extends React.Component<any, RangePickerState> 
     const calendar = (
       <RangeCalendar
         {...calendarProps}
-        onChange={onCalendarChange}
+        onChange={this.handleCalendarChange}
         format={format}
         prefixCls={prefixCls}
         className={calendarClassName}
